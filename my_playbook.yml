@@ -11,7 +11,7 @@
     - name: Clone repository
       become: true
       git:
-        repo: https://github.com/yankils/hello-world.git
+        repo: https://github.com/springframeworkguru/helloworld.git
         dest: /opt/HelloWorld
         version: master
 
