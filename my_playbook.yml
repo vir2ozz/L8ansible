@@ -11,7 +11,7 @@
     - name: Clone repository
       become: true
       git:
-        repo: https://github.com/springframeworkguru/helloworld.git
+        repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
         dest: /opt/HelloWorld
         version: master
 
@@ -28,8 +28,8 @@
     - name: Copy war file to prod
       become: true
       copy:
-        src: /opt/HelloWorld/target/HelloWorld.war
-        dest: /tmp/HelloWorld.war
+        src: /opt/HelloWorld/target/hello-1.0.war
+        dest: /tmp/hello-1.0.war
         remote_src: true
 
 - name: start project
@@ -44,7 +44,7 @@
     - name: Copy war file to webapps
       become: true
       copy:
-        src: /tmp/HelloWorld.war
+        src: /tmp/hello-1.0.war
         dest: /var/lib/tomcat8/webapps/
         remote_src: true
 
