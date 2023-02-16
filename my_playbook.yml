@@ -1,0 +1,55 @@
+---
+- name: build project
+  hosts: build
+  tasks:
+    - name: Install Git
+      become: true
+      apt:
+        name: git
+        state: present
+
+    - name: Clone repository
+      become: true
+      git:
+        repo: https://github.com/yankils/hello-world.git
+        dest: /opt/HelloWorld
+        version: master
+
+    - name: Install Maven
+      become: true
+      apt:
+        name: maven
+        state: present
+
+    - name: Build project
+      become: true
+      command: mvn -f /opt/HelloWorld/pom.xml clean package
+
+    - name: Copy war file to prod
+      become: true
+      copy:
+        src: /opt/HelloWorld/target/HelloWorld.war
+        dest: /tmp/HelloWorld.war
+        remote_src: true
+
+- name: start project
+  hosts: prod
+  tasks:
+    - name: Install Tomcat
+      become: true
+      apt:
+        name: tomcat8
+        state: present
+
+    - name: Copy war file to webapps
+      become: true
+      copy:
+        src: /tmp/HelloWorld.war
+        dest: /var/lib/tomcat8/webapps/
+        remote_src: true
+
+    - name: Start Tomcat
+      become: true
+      service:
+        name: tomcat8
+        state: started
